@@ -7,24 +7,31 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "books")
+@Entity(name = Book.NAME)
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true, makeFinal = true)
 @Getter @Setter @ToString(includeFieldNames = false)
-public final class Book extends EntityBase {
+public final class Book {
+    static final String NAME = "books";
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @Setter(AccessLevel.NONE)
+    private Long id;
+
     @NotBlank(message = "Title is required")
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @NotBlank(message = "Author is required")
-    @Column(nullable = false)
+    @Column(name = "author", nullable = false)
     private String author;
 
     @NotBlank(message = "Isbn is required")
-    @Column(unique = true, nullable = false)
+    @Column(name = "isbn", unique = true, nullable = false)
     private String isbn;
 
     @NotBlank(message = "PublicationDate is required")
@@ -32,20 +39,24 @@ public final class Book extends EntityBase {
     private LocalDate publicationDate;
 
     @NotBlank(message = "Price is required")
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     @NotBlank(message = "Description is required")
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @ToString.Include(rank = 1)
-    private String toStringSupersId() {
-        return "%d".formatted(super.getId());
-    }
+    @Column(name = "created_at", nullable = false)
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime createdAt;
 
-    @ToString.Include
-    private String toStringSupersOtherMembers() {
-        return "%s, %s, %s".formatted(super.getCreatedAt(), super.getUpdatedAt(), super.getDeletedAt());
-    }
+    @Column(name = "updated_at", nullable = false)
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    private void onCreate() { updatedAt = createdAt = LocalDateTime.now(); }
+
+    @PreUpdate
+    private void onUpdate() { updatedAt = LocalDateTime.now(); }
 }
