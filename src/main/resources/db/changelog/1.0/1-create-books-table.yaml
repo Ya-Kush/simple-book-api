@@ -12,17 +12,14 @@ databaseChangeLog:
             autoIncrement: true
             constraints:
               primaryKey: true
-              primaryKeyName: books_PK
+              primaryKeyName: PK_books
         - column:
-            name: created_at
-            type: timestamp
+            name: isbn
+            type: varchar(13)
             constraints:
               nullable: false
-        - column:
-            name: updated_at
-            type: timestamp
-            constraints:
-              nullable: false
+              unique: true
+              uniqueConstraintName: UQ_books_isbn
         - column:
             name: title
             type: varchar(69)
@@ -33,12 +30,6 @@ databaseChangeLog:
             type: varchar(69)
             constraints:
               nullable: false
-        - column:
-            name: isbn
-            type: varchar(13)
-            constraints:
-              nullable: false
-              unique: true
         - column:
             name: publication_date
             type: date
@@ -52,5 +43,13 @@ databaseChangeLog:
         - column:
             name: description
             type: varchar(255)
+        - column:
+            name: created_at
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: updated_at
+            type: timestamp
             constraints:
               nullable: false

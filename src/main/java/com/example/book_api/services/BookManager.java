@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class BookService {
+public class BookManager {
     private final BookRepository repo;
-    public BookService(BookRepository repo) { this.repo = repo; }
+    public BookManager(BookRepository repo) { this.repo = repo; }
 
     public List<? extends Book> getAll() { return repo.findAll(); }
     public Optional<Book> getByIsbn(String isbn) { return repo.findByIsbn(isbn); }
