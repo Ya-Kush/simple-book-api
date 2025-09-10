@@ -1,7 +1,9 @@
 package com.example.book_api.services;
 
+import com.example.book_api.exceptions.BookAlreadyExistException;
 import com.example.book_api.repositories.BookRepository;
 import com.example.book_api.repositories.entities.Book;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,13 @@ public class BookManager {
     public boolean existsByIsbn(String isbn) { return repo.existsByIsbn(isbn); }
 
     @Transactional
-    public Book save(Book book) { return repo.save(book); }
+    public Book save(Book book) {
+        try { return repo.save(book); }
+        catch (DataIntegrityViolationException e) {
+            throw new BookAlreadyExistException("Book with the same ISBN already exists", e);
+        }
+    }
     @Transactional
     public void delete(Book book) { repo.delete(book); }
 }
+
