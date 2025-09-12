@@ -23,3 +23,4 @@ public record PartialBookResponse(
         return new PartialBookResponse(book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPrice());
     }
 }
+

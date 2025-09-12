@@ -16,8 +16,8 @@ public class BookManager {
     private final BookRepository repo;
     public BookManager(BookRepository repo) { this.repo = repo; }
 
-    public List<? extends Book> getAll() { return repo.findAll(); }
-    public Optional<Book> getByIsbn(String isbn) { return repo.findByIsbn(isbn); }
+    public List<? extends Book> findAll() { return repo.findAll(); }
+    public Optional<Book> findByIsbn(String isbn) { return repo.findByIsbn(isbn); }
     public boolean existsByIsbn(String isbn) { return repo.existsByIsbn(isbn); }
 
     @Transactional
@@ -27,6 +27,10 @@ public class BookManager {
             throw new BookAlreadyExistException("Book with the same ISBN already exists", e);
         }
     }
+
+    @Transactional
+    public boolean deleteByIsbn(String isbn) { return repo.deleteByIsbn(isbn) > 0; }
+
     @Transactional
     public void delete(Book book) { repo.delete(book); }
 }
